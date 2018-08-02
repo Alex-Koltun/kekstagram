@@ -27,10 +27,14 @@
   </form>
 
   <div class="upload-overlay">
-    <form class="upload-form upload-filter" id="upload-filter" method="post" enctype="multipart/form-data" autocomplete="off">
+    <form class="upload-form upload-filter invisible" id="upload-filter"
+     method="post"
+     enctype="multipart/form-data"
+     autocomplete="off"
+     action="https://1510.dump.academy/kekstagram">
       <fieldset class="upload-resize-controls">
         <button type="button" class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-dec">–</button><!--
-        --><input type="text" class="upload-resize-control upload-resize-controls-value" value="55%" readonly /><!--
+        --><input type="text" class="upload-resize-control upload-resize-controls-value" value="100%" readonly /><!--
         --><button type="button" class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-inc">+</button>
       </fieldset>
 
@@ -84,16 +88,17 @@
         </label>
       </fieldset>
 
-      <textarea class="upload-form-description" name="upload-description" placeholder="Ваш комментарий..."></textarea>
+      <textarea class="upload-form-description" name="upload-description" placeholder="Ваш комментарий..." maxlength="140"></textarea>
 
       <button class="upload-form-cancel" type="reset" id="upload-cancel"></button>
-      <button class="upload-form-submit" type="submit" id="upload-submit">Отправить</button>
+      <button class="upload-form-submit" type="submit" id="upload-submit" tabindex="0">Отправить</button>
     </form>
   </div>
 
   <div class="upload-message invisible">
     <div class="upload-message-container"></div>
   </div>
+
 </div>
 
 <div class="pictures container" style="font-size: 12px;">
@@ -115,7 +120,7 @@
 
 
 <div class="gallery-overlay invisible">
-  <span class="gallery-overlay-close">&times;</span>
+  <span class="gallery-overlay-close" tabindex = "0">&times;</span>
   <div class="gallery-overlay-preview">
     <img src="" class="gallery-overlay-image" alt="">
     <div class="gallery-overlay-controls">
@@ -136,5 +141,7 @@
 </template>
 
 <script src="js/pictures.js"></script>
+<script src="js/forma.js"></script>
+
 </body>
 </html>
