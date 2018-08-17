@@ -6,6 +6,7 @@
     var galleryClose = galleryOverlay.querySelector('.gallery-overlay-close');
     var picturesBlock = document.querySelector('.pictures');
 
+
     function closeGallery(evt) {
           if ((evt.type === 'keydown' && evt.keyCode === ESC_KEYCODE)||(evt.type === 'click')) {
             galleryOverlay.classList.add('invisible');
@@ -62,5 +63,4 @@
       evt.preventDefault();
       });
     };
-
 })();
