@@ -12,16 +12,16 @@
   var uploadResizeControls = uploadFilter.querySelector('.upload-resize-controls-value');
   var pipka = uploadFilter.querySelector('.upload-filter-level-pin');
   var linePipka = uploadFilter.querySelector('.upload-filter-level-line');
-  var pipkaCont = uploadFilter.querySelector('.upload-filter-level');
+  var pipkaContainer = uploadFilter.querySelector('.upload-filter-level');
   var lineVal = uploadFilter.querySelector('.upload-filter-level-val');
   var filterContrast = document.querySelector(".filter-image-preview");
 
   uploadSelect.classList.remove('invisible');
   uploadFilter.classList.remove('invisible');
-  pipkaCont.classList.add('invisible');
+  pipkaContainer.classList.add('invisible');
 
 
-  function change(evt){
+  function change(){
     uploadOverlay.classList.remove('hidden');
   };
 
@@ -75,26 +75,26 @@
 
     effectImage.classList.remove('filter-none', 'filter-chrome', 'filter-sepia', 'filter-marvin', 'filter-phobos', 'filter-heat');
     effectImage.classList.add(effectId);
-    pipkaCont.classList.remove('invisible');
+    pipkaContainer.classList.remove('invisible');
     pipka.style.left = INIT_CONST;
     lineVal.style.width = INIT_CONST;
     if(window.effectId === "filter-none") {
-      pipkaCont.classList.add('invisible');
+      pipkaContainer.classList.add('invisible');
     }
     if(window.effectId === "filter-chrome") {
-      filterContrast.style.cssText = 'filter : grayscale('+ (INIT_CONST.replace("px","")) +')';
+      filterContrast.style.cssText = 'filter: grayscale('+ (INIT_CONST.replace("%","")/100) +')';
     }
     if(window.effectId === "filter-sepia") {
-      filterContrast.style.cssText = 'filter : sepia('+ (INIT_CONST.replace("px","")) +')';
+      filterContrast.style.cssText = 'filter: sepia('+ (INIT_CONST.replace("%","")/100) +')';
     }
     if(window.effectId === "filter-marvin") {
-      filterContrast.style.cssText = 'filter : invert('+ (INIT_CONST.replace("px","")) +'%)';
+      filterContrast.style.cssText = 'filter: invert('+ INIT_CONST +')';
     }
     if(window.effectId === "filter-phobos") {
-      filterContrast.style.cssText = 'filter : blur('+ (INIT_CONST.replace("px","")*(3/100)) +'px)';
+      filterContrast.style.cssText = 'filter: blur('+ (INIT_CONST.replace("%","")*(3/100)) +'px)';
     }
     if(window.effectId === "filter-heat") {
-      filterContrast.style.cssText = 'filter : brightness('+ (INIT_CONST.replace("px","")*(3/100)) +')';
+      filterContrast.style.cssText = 'filter: brightness('+ (INIT_CONST.replace("%","")*(3/100)) +')';
     }
   };
 
@@ -102,71 +102,65 @@
     effectList[i].addEventListener('click', addEffect);
   };
 
+  function filterChange(param) {
+    if(window.effectId === "filter-chrome") {
+      filterContrast.style.cssText = 'filter: grayscale('+ (param/100) +')';
+    };
+
+    if(window.effectId === "filter-sepia") {
+      filterContrast.style.cssText = 'filter: sepia('+ (param/100) +')';
+    };
+
+    if(window.effectId === "filter-marvin") {
+      filterContrast.style.cssText = 'filter: invert('+ param + '%)';
+    };
+
+    if(window.effectId === "filter-phobos") {
+      filterContrast.style.cssText = 'filter: blur('+ (param * (3/100)) +'px)';
+    };
+
+    if(window.effectId === "filter-heat") {
+      filterContrast.style.cssText = 'filter : brightness('+ (param * (3/100)) +')';
+    };
+  }
+
 
   function activatePipka(evt) {
     evt.preventDefault();
+    var linePipkaLong = +getComputedStyle(linePipka).width.replace("px","");
+    var startX = evt.clientX;
+    var pipkaX = evt.offsetX;
+    var pipkaI = Math.round((pipkaX * 100/linePipkaLong));
 
-    var initX = evt.offsetX;
-    var pipkaX = +getComputedStyle(pipka).left.replace("px","");
-    var linePipkaLong = getComputedStyle(linePipka).width.replace("px","");
+    if(evt.target !== pipka) {
+      pipka.style.left = evt.offsetX + 'px';
+      lineVal.style.width = evt.offsetX + 'px';
+    };
+    filterChange(pipkaI);
 
     function movePipka(event) {
-        event.preventDefault();
+      var shift = startX - event.clientX;
+      startX = event.clientX;
+      pipkaX = pipka.offsetLeft - shift;
+      pipkaI = Math.round((pipkaX * 100/linePipkaLong));
 
-        var coordX = event.offsetX;
-        var deltaX = coordX - initX;
-        var changeX = pipkaX + deltaX;
-        window.changeMove = Math.round((changeX * 100)/linePipkaLong);
-        window.roundChange = changeMove + '%';
-
-        if (changeMove <= 100 || changeMove <= 0) {
-          pipka.style.left = roundChange;
-          lineVal.style.width = roundChange;
+      if(pipkaX <= linePipkaLong && pipkaX >= 0) {
+          pipka.style.left = pipkaX + 'px';
+          lineVal.style.width = pipkaX + 'px';
+          filterChange(pipkaI);
         };
-
-        if(window.effectId === "filter-chrome") {
-          // filterContrast.style.cssText = 'filter : grayscale('+ (INIT_CONST.replace("px","")) +')';
-          filterContrast.style.cssText = 'filter : grayscale('+ (window.changeMove/100) +')';
-        };
-
-        if(window.effectId === "filter-sepia") {
-          // filterContrast.style.cssText = 'filter : sepia('+ (INIT_CONST.replace("px","")) +')';
-          filterContrast.style.cssText = 'filter : sepia('+ (window.changeMove/100) +')';
-        };
-
-        if(window.effectId === "filter-marvin") {
-          // filterContrast.style.cssText = 'filter : invert('+ (INIT_CONST.replace("px","")) +')';
-          filterContrast.style.cssText = 'filter : invert('+ window.roundChange + ')';
-        };
-
-        if(window.effectId === "filter-phobos") {
-          filterContrast.style.cssText = 'filter : blur('+ (INIT_CONST.replace("px","")) +')';
-          filterContrast.style.cssText = 'filter : blur('+ window.changeMove * (3/100) +'px)';
-        };
-
-        if(window.effectId === "filter-heat") {
-          filterContrast.style.cssText = 'filter : brightness('+ (INIT_CONST.replace("px","")) +')';
-          filterContrast.style.cssText = 'filter : brightness('+ window.changeMove * (3/100) +')';
-        };
-
       };
 
      function onMouseUp(upEvt) {
-      upEvt.preventDefault();
-      document.removeEventListener('mousemove', movePipka);
+      linePipka.removeEventListener('mousemove', movePipka);
       document.removeEventListener('mouseup', onMouseUp);
     };
 
-    document.addEventListener('mousemove', movePipka);
+    linePipka.addEventListener('mousemove', movePipka);
     document.addEventListener('mouseup', onMouseUp);
-
-    linePipka.addEventListener('dragover', function (evt) {
-      evt.preventDefault();
-      return false;
-    });
   };
 
-  pipkaCont.addEventListener('mousedown', activatePipka);
+  linePipka.addEventListener('mousedown', activatePipka, false);
   uploadResizeInc.addEventListener('click', resizeInc);
   uploadResizeDec.addEventListener('click', resizeDec);
   uploadFile.addEventListener('change', change);
