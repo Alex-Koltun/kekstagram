@@ -10,16 +10,32 @@
   var uploadResizeDec = uploadFilter.querySelector('.upload-resize-controls-button-dec');
   var uploadResizeInc = uploadFilter.querySelector('.upload-resize-controls-button-inc');
   var uploadResizeControls = uploadFilter.querySelector('.upload-resize-controls-value');
+  var scaleElement = uploadFilter.querySelector('.upload-resize-controls');
+  var uploadFormPreview = uploadOverlay.querySelector('.upload-form-preview');
   var pipka = uploadFilter.querySelector('.upload-filter-level-pin');
   var linePipka = uploadFilter.querySelector('.upload-filter-level-line');
   var pipkaContainer = uploadFilter.querySelector('.upload-filter-level');
   var lineVal = uploadFilter.querySelector('.upload-filter-level-val');
   var filterContrast = document.querySelector(".filter-image-preview");
+  var effectImage = uploadOverlay.querySelector('.filter-image-preview');
+
+  var filterClick = function(evt){
+    pipka.style.left = INIT_CONST;
+    lineVal.style.width = INIT_CONST;
+  };
 
   uploadSelect.classList.remove('invisible');
   uploadFilter.classList.remove('invisible');
   pipkaContainer.classList.add('invisible');
 
+  var adjustScale = function(scale) {
+    uploadFormPreview.style.transform = scale;
+  };
+
+  var applyFilter = function () {
+    effectImage.classList.remove(effectId);
+    effectImage.classList.add(effectId);
+  }
 
   function change(){
     uploadOverlay.classList.remove('hidden');
@@ -38,91 +54,38 @@
       });
   };
 
-  var minValueResize = 25;
-  var maxValueResize = 100;
-  var step = 25;
-
-  function resizeInc() {
-    var currentValue = +uploadOverlay.querySelector('.upload-resize-controls-value').getAttribute('value').replace("%","");
-    var resultInc = currentValue + step;
-    var resultString = String (resultInc/100);
-    var x = 'scale(' + resultString +')' ;
-
-  if(resultInc <= maxValueResize){
-    var newValue = uploadOverlay.querySelector('.upload-resize-controls-value').setAttribute('value', resultInc + '%');
-    uploadOverlay.querySelector('.upload-form-preview').style.transform = x;
-  }
-  };
-
-  function resizeDec() {
-    var currentValue = +uploadOverlay.querySelector('.upload-resize-controls-value').getAttribute('value').replace("%","");
-    var resultDec = currentValue - step;
-    var resultString = String (resultDec/100);
-    var x = 'scale(' + resultString +')' ;
-
-    if (resultDec >= 25) {
-      var newValue = uploadOverlay.querySelector('.upload-resize-controls-value').setAttribute('value', resultDec + '%');
-      uploadOverlay.querySelector('.upload-form-preview').style.transform = x;
-    };
-  };
-
   var effectList = uploadOverlay.querySelectorAll('.upload-filter-controls input');
-
-  function addEffect(evt) {
-    var effectImage = uploadOverlay.querySelector('.filter-image-preview');
-    var y = evt.target.id;
-    window.effectId = y.replace("upload-", "");
-
-    effectImage.classList.remove('filter-none', 'filter-chrome', 'filter-sepia', 'filter-marvin', 'filter-phobos', 'filter-heat');
-    effectImage.classList.add(effectId);
-    pipkaContainer.classList.remove('invisible');
-    pipka.style.left = INIT_CONST;
-    lineVal.style.width = INIT_CONST;
-    if(window.effectId === "filter-none") {
-      pipkaContainer.classList.add('invisible');
-    }
-    if(window.effectId === "filter-chrome") {
-      filterContrast.style.cssText = 'filter: grayscale('+ (INIT_CONST.replace("%","")/100) +')';
-    }
-    if(window.effectId === "filter-sepia") {
-      filterContrast.style.cssText = 'filter: sepia('+ (INIT_CONST.replace("%","")/100) +')';
-    }
-    if(window.effectId === "filter-marvin") {
-      filterContrast.style.cssText = 'filter: invert('+ INIT_CONST +')';
-    }
-    if(window.effectId === "filter-phobos") {
-      filterContrast.style.cssText = 'filter: blur('+ (INIT_CONST.replace("%","")*(3/100)) +'px)';
-    }
-    if(window.effectId === "filter-heat") {
-      filterContrast.style.cssText = 'filter: brightness('+ (INIT_CONST.replace("%","")*(3/100)) +')';
-    }
-  };
-
-  for( var i = 0 ; i < effectList.length; i++) {
-    effectList[i].addEventListener('click', addEffect);
-  };
 
   function filterChange(param) {
     if(window.effectId === "filter-chrome") {
-      filterContrast.style.cssText = 'filter: grayscale('+ (param/100) +')';
+      effectImage.style.cssText = 'filter: grayscale('+ (param/100) +')';
     };
 
     if(window.effectId === "filter-sepia") {
-      filterContrast.style.cssText = 'filter: sepia('+ (param/100) +')';
+    effectImage.style.cssText = 'filter: sepia('+ (param/100) +')';
     };
 
     if(window.effectId === "filter-marvin") {
-      filterContrast.style.cssText = 'filter: invert('+ param + '%)';
+    effectImage.style.cssText = 'filter: invert('+ param + '%)';
     };
 
     if(window.effectId === "filter-phobos") {
-      filterContrast.style.cssText = 'filter: blur('+ (param * (3/100)) +'px)';
+    effectImage.style.cssText = 'filter: blur('+ (param * (3/100)) +'px)';
     };
 
     if(window.effectId === "filter-heat") {
-      filterContrast.style.cssText = 'filter : brightness('+ (param * (3/100)) +')';
+    effectImage.style.cssText = 'filter : brightness('+ (param * (3/100)) +')';
     };
   }
+
+
+
+  for( var i = 0 ; i < effectList.length; i++) {
+    effectList[i].addEventListener('click', function(evtFilter){
+      return window.initializeFilters(evtFilter, effectImage, pipkaContainer, pipka, lineVal);
+    });
+    effectList[i].addEventListener('click', filterClick);
+  };
 
 
   function activatePipka(evt) {
@@ -132,10 +95,10 @@
     var pipkaX = evt.offsetX;
     var pipkaI = Math.round((pipkaX * 100/linePipkaLong));
 
-    if(evt.target !== pipka) {
+
       pipka.style.left = evt.offsetX + 'px';
       lineVal.style.width = evt.offsetX + 'px';
-    };
+
     filterChange(pipkaI);
 
     function movePipka(event) {
@@ -161,8 +124,18 @@
   };
 
   linePipka.addEventListener('mousedown', activatePipka, false);
-  uploadResizeInc.addEventListener('click', resizeInc);
-  uploadResizeDec.addEventListener('click', resizeDec);
+  // uploadResizeInc.addEventListener('click', function(evtScale) {
+  //   return window.initializeScale(evtScale, uploadResizeControls, uploadFormPreview)
+  // });
+  // uploadResizeDec.addEventListener('click', function(evtScale) {
+  //   return window.initializeScale(evtScale, uploadResizeControls, uploadFormPreview)
+  // });
+  uploadResizeInc.addEventListener('click', function(evtScale) {
+    return window.initializeScale(evtScale, scaleElement, adjustScale)
+  });
+  uploadResizeDec.addEventListener('click', function(evtScale) {
+    return window.initializeScale(evtScale, scaleElement, adjustScale)
+  });
   uploadFile.addEventListener('change', change);
   document.addEventListener('keydown', closeFilter);
   uploadOverlay.querySelector('#upload-cancel').addEventListener('click',closeFilter);
