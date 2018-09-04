@@ -1,3 +1,3 @@
 'use strict';
-window.picture;
-window.preview;
+window.picture();
+// window.preview();

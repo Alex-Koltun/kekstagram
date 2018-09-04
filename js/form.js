@@ -16,10 +16,9 @@
   var linePipka = uploadFilter.querySelector('.upload-filter-level-line');
   var pipkaContainer = uploadFilter.querySelector('.upload-filter-level');
   var lineVal = uploadFilter.querySelector('.upload-filter-level-val');
-  var filterContrast = document.querySelector(".filter-image-preview");
+  var filterContrast = document.querySelector('.filter-image-preview');
   var effectImage = uploadOverlay.querySelector('.filter-image-preview');
-
-  var filterClick = function(evt){
+  var filterClick = function(evt) {
     pipka.style.left = INIT_CONST;
     lineVal.style.width = INIT_CONST;
   };
@@ -31,11 +30,6 @@
   var adjustScale = function(scale) {
     uploadFormPreview.style.transform = scale;
   };
-
-  var applyFilter = function () {
-    effectImage.classList.remove(effectId);
-    effectImage.classList.add(effectId);
-  }
 
   function change(){
     uploadOverlay.classList.remove('hidden');
@@ -78,15 +72,12 @@
     };
   }
 
-
-
   for( var i = 0 ; i < effectList.length; i++) {
     effectList[i].addEventListener('click', function(evtFilter){
       return window.initializeFilters(evtFilter, effectImage, pipkaContainer, pipka, lineVal);
     });
     effectList[i].addEventListener('click', filterClick);
   };
-
 
   function activatePipka(evt) {
     evt.preventDefault();
@@ -124,12 +115,6 @@
   };
 
   linePipka.addEventListener('mousedown', activatePipka, false);
-  // uploadResizeInc.addEventListener('click', function(evtScale) {
-  //   return window.initializeScale(evtScale, uploadResizeControls, uploadFormPreview)
-  // });
-  // uploadResizeDec.addEventListener('click', function(evtScale) {
-  //   return window.initializeScale(evtScale, uploadResizeControls, uploadFormPreview)
-  // });
   uploadResizeInc.addEventListener('click', function(evtScale) {
     return window.initializeScale(evtScale, scaleElement, adjustScale)
   });
@@ -139,4 +124,33 @@
   uploadFile.addEventListener('change', change);
   document.addEventListener('keydown', closeFilter);
   uploadOverlay.querySelector('#upload-cancel').addEventListener('click',closeFilter);
+
+  var form = uploadOverlay.querySelector('.upload-form');
+  var input = document.querySelector('.upload-filter-controls');
+
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  }
+
+  form.addEventListener('submit', function (evtSubmit) {
+    evtSubmit.preventDefault();
+    var currentEffect = input.querySelector('input[checked]').getAttribute('value');
+    var currentScale = uploadResizeControls.getAttribute('value');
+
+    var fdata = new FormData(document.forms.test);
+
+    fdata.set('effect', currentEffect);
+    fdata.set('scale', currentScale);
+    window.backend.save(fdata , function (response) {
+      uploadOverlay.classList.add('hidden');
+    }, errorHandler);
+  });
 })();

@@ -20,21 +20,21 @@
 </form>
 
 <div class="upload">
-  <form class="upload-form upload-image invisible" id="upload-select-image" method="post" enctype="multipart/form-data">
+  <form class="upload-form upload-image invisible" id="upload-select-image" method="post" name="test" enctype="multipart/form-data">
     <input type="file" id="upload-file" class="upload-input" name="filename" required>
     <label class="upload-file upload-control" for="upload-file"></label>
     <button class="upload-submit upload-control" type="submit"></button>
   </form>
 
   <div class="upload-overlay">
-    <form class="upload-form upload-filter invisible" id="upload-filter"
+    <form class="upload-form upload-filter invisible" name="test" id="upload-filter"
      method="post"
      enctype="multipart/form-data"
      autocomplete="off"
      action="https://1510.dump.academy/kekstagram">
       <fieldset class="upload-resize-controls">
         <button type="button" class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-dec">–</button><!--
-        --><input type="text" class="upload-resize-control upload-resize-controls-value" value="100%" readonly /><!--
+        --><input type="text"  name="scale" class="upload-resize-control upload-resize-controls-value" value="100%" readonly /><!--
         --><button type="button" class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-inc">+</button>
       </fieldset>
 
@@ -51,37 +51,37 @@
           </div>
         </div>
 
-        <input type="radio" name="upload-filter" id="upload-filter-none" value="none" checked>
+        <input type="radio" name="effect" id="upload-filter-none" value="none" checked>
         <label class="upload-filter-label" for="upload-filter-none">
           <div class="upload-filter-preview"></div>
           Оригинал
         </label>
 
-        <input type="radio" name="upload-filter" id="upload-filter-chrome" value="chrome">
+        <input type="radio" name="effect" id="upload-filter-chrome" value="chrome">
         <label class="upload-filter-label upload-filter-label-chrome" for="upload-filter-chrome">
           <div class="upload-filter-preview"></div>
           Хром
         </label>
 
-        <input type="radio" name="upload-filter" id="upload-filter-sepia" value="sepia">
+        <input type="radio"  name="effect" id="upload-filter-sepia" value="sepia">
         <label class="upload-filter-label upload-filter-label-sepia" for="upload-filter-sepia">
           <div class="upload-filter-preview"></div>
           Сепия
         </label>
 
-        <input type="radio" name="upload-filter" id="upload-filter-marvin" value="marvin">
+        <input type="radio"  name="effect" id="upload-filter-marvin" value="marvin">
         <label class="upload-filter-label upload-filter-label-marvin" for="upload-filter-marvin">
           <div class="upload-filter-preview"></div>
           Марвин
         </label>
 
-        <input type="radio" name="upload-filter" id="upload-filter-phobos" value="phobos">
+        <input type="radio"  name="effect" id="upload-filter-phobos" value="phobos">
         <label class="upload-filter-label upload-filter-label-phobos" for="upload-filter-phobos">
           <div class="upload-filter-preview"></div>
           Фобос
         </label>
 
-        <input type="radio" name="upload-filter" id="upload-filter-heat" value="heat">
+        <input type="radio"  name="effect" id="upload-filter-heat" value="heat">
         <label class="upload-filter-label upload-filter-label-heat" for="upload-filter-heat">
           <div class="upload-filter-preview"></div>
           Зной
@@ -140,13 +140,19 @@
   </a>
 </template>
 
-<script src="js/data.js"></script>
-<script src="js/picture.js"></script>
-<script src="js/preview.js"></script>
-<script src="js/gallery.js"></script>
+<!-- <script src="js/data.js"></script> -->
+<script src="js/backend.js"></script>
 <script src="js/initialize-scale.js"></script>
 <script src="js/initialize-filters.js"></script>
+<script src="js/picture.js"></script>
+<!-- <script src="js/preview.js"></script> -->
+<script src="js/gallery.js"></script>
 <script src="js/form.js"></script>
+<script>
+
+
+
+</script>
 
 
 </body>

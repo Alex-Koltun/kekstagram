@@ -3,6 +3,10 @@ window.initializeFilters = (function(evtFilter, effectImage, pipkaContainer, pip
   window.effectId = evtFilter.target.id.replace("upload-", "");
 
   var removeFilter = effectImage.classList.remove("filter-none", "filter-chrome", "filter-sepia", "filter-marvin", "filter-phobos", "filter-heat");
+  var inputsRadio = document.querySelector('.upload-filter-controls').querySelectorAll('input[type=radio]');
+  for(var i = 0; i <= inputsRadio.length - 1; i++) {
+    inputsRadio[i].removeAttribute('checked');
+  };
   var addFilter = effectImage.classList.add(effectId);
   var param = 20;
 
@@ -11,6 +15,7 @@ window.initializeFilters = (function(evtFilter, effectImage, pipkaContainer, pip
     removeFilter;
     addFilter;
     pipkaContainer.classList.add('invisible');
+    evtFilter.target.setAttribute('checked', '');
     break;
 
     case "filter-chrome":
@@ -20,6 +25,7 @@ window.initializeFilters = (function(evtFilter, effectImage, pipkaContainer, pip
     pipka.style.left = param;
     lineVal.style.width = param;
     effectImage.style.cssText = 'filter: grayscale('+ (param/100) +')';
+    evtFilter.target.setAttribute('checked', '');
     break;
 
     case "filter-sepia":
@@ -29,6 +35,7 @@ window.initializeFilters = (function(evtFilter, effectImage, pipkaContainer, pip
     pipka.style.left = param;
     lineVal.style.width = param;
     effectImage.style.cssText = 'filter : sepia('+ (param/100) +')';
+    evtFilter.target.setAttribute('checked', '');
     break;
 
     case "filter-marvin":
@@ -38,6 +45,7 @@ window.initializeFilters = (function(evtFilter, effectImage, pipkaContainer, pip
     pipka.style.left = param;
     lineVal.style.width = param;
     effectImage.style.cssText = 'filter: invert('+ param + '%)';
+    evtFilter.target.setAttribute('checked', '');
     break;
 
     case "filter-phobos":
@@ -47,6 +55,7 @@ window.initializeFilters = (function(evtFilter, effectImage, pipkaContainer, pip
     pipka.style.left = param;
     lineVal.style.width = param;
     effectImage.style.cssText = 'filter: blur('+ (param * (3/100)) +'px)';
+    evtFilter.target.setAttribute('checked', '');
     break;
 
     case "filter-heat":
@@ -56,6 +65,7 @@ window.initializeFilters = (function(evtFilter, effectImage, pipkaContainer, pip
     pipka.style.left = param;
     lineVal.style.width = param;
     effectImage.style.cssText = 'filter : brightness('+ (param * (3/100)) +')';
+    evtFilter.target.setAttribute('checked', '');
     break;
   }
 });
